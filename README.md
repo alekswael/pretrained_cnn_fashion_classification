@@ -1,19 +1,98 @@
-# Using pretrained CNNs for image classification
+<!-- PROJECT LOGO -->
+<br />
+  <h1 align="center">Visual Analytics Portfolio</h1> 
+  <h2 align="center">Assignment 3: Using pretrained CNNs for image classification</h2> 
+  <h3 align="center">Cultural Data Science, 2023</h3> 
+  <p align="center">
+  Auther: Aleksander Moeslund Wael <br>
+  Student no. 202005192
+  </p>
+</p>
 
-In the previous assignments involving classification, we were performing a kind of simple feature extraction on images by making them greyscale and flattening them to a single vector. This vector of pixel values was then used as the input for some kind of classification model.
+## About the project
+This repo contains code for conducting a 15-label image classification task using a finetuned, pretrained convolutional neural network.
 
-For this assignment, we're going to be working with an interesting kind of cultural phenomenon - fashion. On UCloud, you have access to a dataset of *Indo fashion* taken from this [Kaggle dataset](https://www.kaggle.com/datasets/validmodel/indo-fashion-dataset). There is a paper which goes along with it on *arXiv.org*, which you can read [here](https://arxiv.org/abs/2104.02830).
+### Data
+The data used for the project is the [Indo fashion dataset](https://www.kaggle.com/datasets/validmodel/indo-fashion-dataset) available on Kaggle. The dataset consists of ~106K images displaying 15 unique cloth categories. The data is pre-split into a training, test and validation set.
 
-Your instructions for this assignment are short and simple:
+### Model
+The `EfficientNetB0` model was used, being a light-weight alternative to other pretrained CNNs (like VGG16). The model has approx 5.3M parameters and is trained on the ImageNet dataset. [(source)](https://arxiv.org/abs/1905.11946).
 
-- You should write code which trains a classifier on this dataset using a *pretrained CNN like VGG16*
-- Save the training and validation history plots
-- Save the classification report
+### Pipeline
+The `cnn_fashion.py` script contains Python code. The pipeline is as follows:
+1. Import and preprocess images and metadata
+2. Augment image data
+3. Load the `EfficientNetB0` model
+4. Train the model on the Indo fashion training set.
+5. Save the learning curve plots from training.
+6. Predict labels of the test set.
+7. Print and save a classification report.
 
-## Tips
+## Usage
 
-- You should not upload the data to your repo - it's around 3GB in size.
-  - Instead, you should document in the README file where your data comes from, how a user should find it, and where it should be saved in order for your code to work correctly.
-- The data comes already split into training, test, and validation datasets. You can use these in a ```TensorFlow``` data generator pipeline like we saw in class this week - you can see an example of that [here](https://stackoverflow.com/questions/42443936/keras-split-train-test-set-when-using-imagedatagenerator).
-- There are a lot of images, around 106k in total. Make sure to reserve enough time for running your code!
-- The image labels are in the metadata folder, stored as JSON files. These can be read into ```pandas``` using ```read_json()```. You can find the documentation for that online.
+The repo was setup to work with Windows (the WIN_ files), MacOS and Linux (the MACL_ files).
+
+### 1. Clone repository to desired location
+
+```bash
+git clone https://github.com/AU-CDS/assignment3-pretrained-cnns-alekswael
+cd assignment3-pretrained-cnns-alekswael
+```
+### 2. Setup
+
+```bash
+bash WIN_setup.sh
+```
+**NOTE:** Depending on your OS, run either `WIN_setup.sh` or `MACL_setup.sh`.
+
+The setup script does the following:
+1. Creates a virtual environment for the project
+2. Activates the virtual environment
+3. Installs the correct versions of the packages required
+5. Deactivates the virtual environment
+
+### 3. Run
+```bash
+bash WIN_run.sh
+```
+**NOTE:** Depending on your OS, run either `WIN_run.sh` or `MACL_run.sh`.
+
+Run the script in a bash terminal.
+
+The script does the following:
+1. Activates the virtual environment
+2. Runs `cnn_fashion.py` located in the `src` folder
+3. Deactivates the virtual environment
+
+## Repository structure
+This repository has the following structure:
+```
+│   MACL_run.sh
+│   MACL_setup.sh
+│   README.md
+│   requirements.txt
+│   WIN_run.sh
+│   WIN_setup.sh
+│
+├───images
+│   ├───metadata
+│   │       test_data.json
+│   │       train_data.json
+│   │       val_data.json
+│   │
+│   ├───test
+│   │       7500.jpeg
+│   │       
+│   ├───train
+│   │      91166.jpeg
+│   │
+│   └───val
+│           7500.jpeg
+│
+├───out
+└───src
+        cnn_fashion.py
+```
+
+## Remarks on findings
+When using a subset of the data (train, test, val = 8000, 2000, 2000), the model 
