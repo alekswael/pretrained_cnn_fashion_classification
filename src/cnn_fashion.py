@@ -11,14 +11,14 @@ import tensorflow as tf
 # image processsing
 from tensorflow.keras.preprocessing.image import (ImageDataGenerator)
 # VGG16 model
-from tensorflow.keras.applications.efficientnet import (EfficientNetB0)
+from tensorflow.keras.applications.inception_v3 import InceptionV3
+from tensorflow.keras.applications.vgg16 import VGG16
 # layers
-from tensorflow.keras.layers import (Flatten, Dense, BatchNormalization)
+from tensorflow.keras.layers import (Dense, Flatten, Dropout, GlobalAveragePooling2D, BatchNormalization)
 # generic model object
 from tensorflow.keras.models import Model
 # optimizers
-from tensorflow.keras.optimizers.schedules import ExponentialDecay
-from tensorflow.keras.optimizers import SGD
+from tensorflow.keras.optimizers import Adam, SGD
 #scikit-learn
 from sklearn.metrics import classification_report
 # for plotting
@@ -30,7 +30,7 @@ def input_parser(): # This is the function that parses the input arguments when 
     ap.add_argument("-bs",
                     "--batch_size",
                     help="Batch size for training.",
-                    type = int, default=64) # This is the argument for the batch size.
+                    type = int, default=32) # This is the argument for the batch size.
     ap.add_argument("--train_subset",
                     help="Number of training images to use. If not specified, all images are used.",
                     type = int, default=91166) # This is the argument for the number of training images.
@@ -40,26 +40,6 @@ def input_parser(): # This is the function that parses the input arguments when 
     ap.add_argument("--test_subset",
                     help="Number of test images to use. If not specified, all images are used.",
                     type = int, default=7500) # This is the argument for the number of test images.
-    ap.add_argument("-po",
-                    "--pooling_type",
-                    help="Type of pooling to use. Either 'avg' or 'max'.",
-                    type = str, default="avg") # This is the argument for the pooling type.
-    ap.add_argument("-ilr",
-                    "--initial_learning_rate",
-                    help="Initial learning rate for the optimizer.",
-                    type = float, default=0.01) # This is the argument for the initial learning rate.
-    ap.add_argument("-ds",
-                    "--decay_steps",
-                    help="Decay steps for the learning rate.",
-                    type = int, default=10000) # This is the argument for the decay steps.
-    ap.add_argument("-dr",
-                    "--decay_rate",
-                    help="Decay rate for the learning rate.",
-                    type = float, default=0.9) # This is the argument for the decay rate.
-    ap.add_argument("-l",
-                    "--loss",
-                    help="Loss function to use.",
-                    type = str, default="categorical_crossentropy") # This is the argument for the loss function.
     ap.add_argument("-e",
                     "--epochs",
                     help="Number of epochs to train for.",
@@ -84,20 +64,17 @@ def import_and_preprocess_data():
     
     return train_df, test_df, val_df
 
-
 # Set parameters for data loading and image processing
 
 def setup_generators(train_df, test_df, val_df):
     # Parameters for loading data and images
 
     train_generator = ImageDataGenerator(horizontal_flip=True,
-                                         rescale = 1./255,
-                                         rotation_range=20
+                                         rescale = 1./255
                                          )
 
     val_generator = ImageDataGenerator(horizontal_flip=True,
-                                       rescale = 1./255,
-                                       rotation_range=20
+                                       rescale = 1./255
                                        )
     
     test_generator = ImageDataGenerator()
@@ -143,49 +120,48 @@ def setup_data(train_df, test_df, val_df, train_generator, val_generator, test_g
     
     return train_ds, val_ds, test_ds
 
-def model_setup(pooling_type_arg, initial_learning_rate_arg, decay_steps_arg, decay_rate_arg, loss_arg):
+def model_setup():
+
+    tf.keras.backend.clear_session()
+    
     # load model without classifier layers
-    model = EfficientNetB0(include_top=False, 
-                pooling=pooling_type_arg,
-                input_shape=(224, 224, 3))
+    model = VGG16(include_top=False, 
+                pooling="avg",
+                input_shape=(224, 224, 3),
+                weights='imagenet')
 
     # mark loaded layers as not trainable
     for layer in model.layers:
         layer.trainable = False
-        
-    # add new classifier layers
-    flat1 = Flatten()(model.layers[-1].output)
-    bn = BatchNormalization()(flat1)
-    class1 = Dense(256, 
-                activation='relu')(bn)
-    class2 = Dense(128, 
-                activation='relu')(class1)
-    output = Dense(15, 
-                activation='softmax')(class2)
+    
+    x = Flatten()(model.layers[-1].output)
+    x = BatchNormalization()(x)
+    x = Dense(256, activation='relu')(x)
+    x = Dense(128, activation='relu')(x)
+    outputs = Dense(15, activation='softmax')(x)
 
-    # define new model
-    model = Model(inputs=model.inputs, 
-                outputs=output)
+    model = Model(inputs=model.inputs, outputs=outputs)
 
     # compile
     lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
-        initial_learning_rate=initial_learning_rate_arg,
-        decay_steps=decay_steps_arg,
-        decay_rate=decay_rate_arg)
-
+        initial_learning_rate=0.01,
+        decay_steps=10000,
+        decay_rate=0.9)
+    
     sgd = SGD(learning_rate=lr_schedule)
 
     model.compile(optimizer=sgd,
-                loss=loss_arg,
+                loss='categorical_crossentropy',
                 metrics=['accuracy'])
+    
+    print(model.summary())
     
     return model
 
-def train_model(model, train_ds, val_ds, epochs_arg, batch_size_arg):
-    history = model.fit(train_ds,
+def train_model(model, train_ds, val_ds, epochs_arg):
+    history = model.fit_generator(train_ds,
                         validation_data = val_ds,
-                        epochs=epochs_arg,
-                        batch_size=batch_size_arg,
+                        epochs=epochs_arg
                         )
     
     return history
@@ -215,11 +191,10 @@ def plot_history(H, epochs):
     plt.legend()
     plt.savefig(os.path.join(os.getcwd(), "out", "cnn_fashion.png"))
 
-def make_predictions(model, test_ds, batch_size_arg):
+def make_predictions(model, test_ds):
     y_test = test_ds.classes
 
-    y_pred = model.predict(test_ds,
-                        batch_size = batch_size_arg,)
+    y_pred = model.predict_generator(test_ds, steps=len(test_ds))
 
     y_pred = np.argmax(y_pred, axis=1)
     
@@ -246,13 +221,13 @@ def main():
     print("Setting up data...")
     train_ds, val_ds, test_ds = setup_data(train_df, test_df, val_df, train_generator, val_generator, test_generator, args.batch_size, args.train_subset, args.val_subset, args.test_subset)
     print("Setting up model...")
-    model = model_setup(args.pooling_type, args.initial_learning_rate, args.decay_steps, args.decay_rate, args.loss)
+    model = model_setup()
     print("Training model...")
-    history = train_model(model, train_ds, val_ds, args.epochs, args.batch_size)
+    history = train_model(model, train_ds, val_ds, args.epochs)
     print("Plotting and saving learning curves...")
     plot_history(history, args.epochs)
     print("Making predictions...")
-    y_test, y_pred = make_predictions(model, test_ds, args.batch_size)
+    y_test, y_pred = make_predictions(model, test_ds)
     print("Printing classification report...")
     print_report(y_test, y_pred, test_ds)
 
