@@ -30,7 +30,7 @@ def input_parser(): # This is the function that parses the input arguments when 
     ap.add_argument("-bs",
                     "--batch_size",
                     help="Batch size for training.",
-                    type = int, default=32) # This is the argument for the batch size.
+                    type = int, default=64) # This is the argument for the batch size.
     ap.add_argument("--train_subset",
                     help="Number of training images to use. If not specified, all images are used.",
                     type = int, default=91166) # This is the argument for the number of training images.
@@ -49,14 +49,14 @@ def input_parser(): # This is the function that parses the input arguments when 
 
 def import_and_preprocess_data():
     # Importing labels
-    train_df = pd.read_json(os.path.join(os.getcwd(), "images", "metadata", "train_data.json"), lines=True)
-    test_df = pd.read_json(os.path.join(os.getcwd(), "images", "metadata", "test_data.json"), lines=True)
-    val_df = pd.read_json(os.path.join(os.getcwd(), "images", "metadata", "val_data.json"), lines=True)
+    train_df = pd.read_json(os.path.join(os.getcwd(), "..", "images", "metadata", "train_data.json"), lines=True)
+    test_df = pd.read_json(os.path.join(os.getcwd(), "..", "images", "metadata", "test_data.json"), lines=True)
+    val_df = pd.read_json(os.path.join(os.getcwd(), "..", "images", "metadata", "val_data.json"), lines=True)
 
     # Changing path names to absolute path
     def convert_image_path(image_path):
         base_dir = os.getcwd()
-        return os.path.join(base_dir, image_path)
+        return os.path.join(base_dir, "..", image_path)
 
     train_df['image_path'] = train_df['image_path'].apply(convert_image_path)
     test_df['image_path'] = test_df['image_path'].apply(convert_image_path)
@@ -126,7 +126,7 @@ def model_setup():
     
     # load model without classifier layers
     model = VGG16(include_top=False, 
-                pooling="avg",
+                pooling="max",
                 input_shape=(224, 224, 3),
                 weights='imagenet')
 

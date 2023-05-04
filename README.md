@@ -16,13 +16,13 @@ This repo contains code for finetuning a pretrained convolutional neural network
 The data used in the project is the [Indo fashion dataset](https://www.kaggle.com/datasets/validmodel/indo-fashion-dataset) available on Kaggle. The dataset consists of ~106K images displaying 15 unique cloth categories. The data is pre-split into a training, test and validation set.
 
 ### Model
-The `EfficientNetB0` model was used, being a light-weight alternative to other pretrained CNNs (like VGG16). The model has approx 5.3M parameters and is trained on the ImageNet dataset. [(source)](https://arxiv.org/abs/1905.11946).
+The `VGG16` model was used. The model is 16 layers deep, and has approx 138 million parameters and is trained on the ImageNet dataset. [(source)](https://medium.com/@mygreatlearning/everything-you-need-to-know-about-vgg16-7315defb5918).
 
 ### Pipeline
 The `cnn_fashion.py` script in the `src` folder contains the main code pipeline. The structure is as follows:
 1. Import and preprocess images and metadata
 2. Augment image data
-3. Load the `EfficientNetB0` model
+3. Load the `VGG16` model
 4. Train the model on the Indo fashion training set.
 5. Save the learning curve plots from training.
 6. Predict labels of the test set.
