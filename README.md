@@ -24,7 +24,7 @@ Your instructions for this assignment are short and simple:
 This repo contains code for finetuning a pretrained convolutional neural network, and conducting a 15-label image classification task.
 
 ### Data
-The data used in the project is the [Indo fashion dataset](https://www.kaggle.com/datasets/validmodel/indo-fashion-dataset) available on Kaggle. The dataset consists of ~106K images displaying 15 unique cloth categories. The data is pre-split into a training (911), test and validation set.
+The data used in the project is the [Indo fashion dataset](https://www.kaggle.com/datasets/validmodel/indo-fashion-dataset) available on Kaggle. The dataset consists of ~106K images displaying 15 unique cloth categories. The data is pre-split into a training, test and validation set. Make sure to download and structure the data is shown in the `repository structure` segment.
 
 ### Model
 The `VGG16` model was used. The model is 16 layers deep, and has approx 138 million parameters and is trained on the ImageNet dataset. [(source)](https://medium.com/@mygreatlearning/everything-you-need-to-know-about-vgg16-7315defb5918).
@@ -41,7 +41,7 @@ The `cnn_fashion.py` script in the `src` folder contains the main code pipeline.
 
 ## Requirements
 
-The code is tested on Python 3.11.2. Futhermore, a bash-compatible terminal is required for running shell scripts (such as Git for Windows).
+The code is tested on Python 3.11.2. Futhermore, if your OS is not UNIX-based, a bash-compatible terminal is required for running shell scripts (such as Git for Windows).
 
 ## Usage
 
@@ -83,7 +83,7 @@ bash WIN_run.sh
 Some model parameters can be set through the ``argparse`` module. However, this requires running the Python script seperately OR altering the `run*.sh` file to include the arguments. The Python script is located in the `src` folder. Make sure to activate the environment before running the Python script.
 
 ```
-usage: cnn_fashion.py [-h] [-bs BATCH_SIZE] [--train_subset TRAIN_SUBSET] [--val_subset VAL_SUBSET] [--test_subset TEST_SUBSET] [-e EPOCHS]
+cnn_fashion.py [-h] [-bs BATCH_SIZE] [--train_subset TRAIN_SUBSET] [--val_subset VAL_SUBSET] [--test_subset TEST_SUBSET] [-e EPOCHS]
 
 options:
   -h, --help            show this help message and exit
