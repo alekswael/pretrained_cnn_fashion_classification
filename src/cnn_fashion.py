@@ -26,7 +26,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def input_parser(): # This is the function that parses the input arguments when run from the terminal.
-    ap = argparse.ArgumentParser() # This is the argument parser. I add the arguments below.
+    ap = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter) # This is the argument parser. I add the arguments below.
     ap.add_argument("-bs",
                     "--batch_size",
                     help="Batch size for training.",
