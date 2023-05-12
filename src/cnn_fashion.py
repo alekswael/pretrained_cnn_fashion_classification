@@ -11,7 +11,6 @@ import tensorflow as tf
 # image processsing
 from tensorflow.keras.preprocessing.image import (ImageDataGenerator)
 # VGG16 model
-from tensorflow.keras.applications.inception_v3 import InceptionV3
 from tensorflow.keras.applications.vgg16 import VGG16
 # layers
 from tensorflow.keras.layers import (Dense, Flatten, Dropout, GlobalAveragePooling2D, BatchNormalization)
@@ -66,7 +65,7 @@ def import_and_preprocess_data():
 
 # Set parameters for data loading and image processing
 
-def setup_generators(train_df, test_df, val_df):
+def setup_generators():
     # Parameters for loading data and images
 
     train_generator = ImageDataGenerator(horizontal_flip=True,

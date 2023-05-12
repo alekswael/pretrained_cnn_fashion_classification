@@ -1,12 +1,10 @@
-<!-- PROJECT LOGO -->
 <br />
-  <h1 align="center">Visual Analytics Portfolio</h1> 
-  <h2 align="center">Assignment 3: Using pretrained CNNs for image classification</h2> 
-  <h3 align="center">Cultural Data Science, 2023</h3> 
-  <p align="center">
-  Auther: Aleksander Moeslund Wael <br>
+  <h1 align="center">Assignment 3: Using pretrained CNNs for image classification</h1> 
+  <h2 align="center">Cultural Data Science, 2023</h2> 
+  <h3 align="center">
+  Author: Aleksander Moeslund Wael <br>
   Student no. 202005192
-  </p>
+  </h3>
 </p>
 
 ## Assignment notes (Ross)
@@ -19,12 +17,13 @@ Your instructions for this assignment are short and simple:
 - You should write code which trains a classifier on this dataset using a *pretrained CNN like VGG16*
 - Save the training and validation history plots
 - Save the classification report
+---
 
 ## About the project
-This repo contains code for finetuning a pretrained convolutional neural network, and conducting a 15-label image classification task.
+This repo contains code for finetuning a pretrained convolutional neural network (VGG16), and conducting a 15-label image classification task.
 
 ### Data
-The data used in the project is the [Indo fashion dataset](https://www.kaggle.com/datasets/validmodel/indo-fashion-dataset) available on Kaggle. The dataset consists of ~106K images displaying 15 unique cloth categories. The data is pre-split into a training, test and validation set. Make sure to download and structure the data is shown in the `repository structure` segment.
+The data used in the project is the [Indo fashion dataset](https://www.kaggle.com/datasets/validmodel/indo-fashion-dataset) available on Kaggle. The dataset consists of ~106K images displaying 15 unique cloth categories. The data is pre-split into a training, test and validation set. Make sure to download and structure the data as shown in the `repository structure` segment.
 
 ### Model
 The `VGG16` model was used. The model is 16 layers deep, and has approx 138 million parameters and is trained on the ImageNet dataset. [(source)](https://medium.com/@mygreatlearning/everything-you-need-to-know-about-vgg16-7315defb5918).
@@ -160,3 +159,4 @@ leggings_and_salwars       0.38      0.69      0.49       500
 ```
 
 ![Learning curves](out\cnn_fashion_SUBSET.png)
+*Learning curves for model fit.*
