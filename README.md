@@ -49,8 +49,8 @@ The repo was setup to work with Windows (the WIN_ files), MacOS and Linux (the M
 ### 1. Clone repository to desired directory
 
 ```bash
-git clone https://github.com/AU-CDS/assignment3-pretrained-cnns-alekswael
-cd assignment3-pretrained-cnns-alekswael
+git clone https://github.com/alekswael/assignment3-pretrained-cnns
+cd assignment3-pretrained-cnns
 ```
 ### 2. Run setup script 
 **NOTE:** Depending on your OS, run either `WIN_setup.sh` or `MACL_setup.sh`.
