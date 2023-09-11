@@ -4,7 +4,6 @@
   Author: Aleksander Moeslund Wael <br>
   </h3>
 </p>
----
 
 ## About the project
 This repo contains code for finetuning a pretrained convolutional neural network (VGG16), and conducting a 15-label image classification task.
