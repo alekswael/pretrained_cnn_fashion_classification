@@ -1,22 +1,9 @@
 <br />
-  <h1 align="center">Assignment 3: Using pretrained CNNs for image classification</h1> 
-  <h2 align="center">Cultural Data Science, 2023</h2> 
+  <h1 align="center">Using a pretrained CNN (VGG16) for image classification</h1> 
   <h3 align="center">
   Author: Aleksander Moeslund Wael <br>
-  Student no. 202005192
   </h3>
 </p>
-
-## Assignment notes (Ross)
-In the previous assignments involving classification, we were performing a kind of simple feature extraction on images by making them greyscale and flattening them to a single vector. This vector of pixel values was then used as the input for some kind of classification model.
-
-For this assignment, we're going to be working with an interesting kind of cultural phenomenon - fashion. On UCloud, you have access to a dataset of *Indo fashion* taken from this [Kaggle dataset](https://www.kaggle.com/datasets/validmodel/indo-fashion-dataset). There is a paper which goes along with it on *arXiv.org*, which you can read [here](https://arxiv.org/abs/2104.02830).
-
-Your instructions for this assignment are short and simple:
-
-- You should write code which trains a classifier on this dataset using a *pretrained CNN like VGG16*
-- Save the training and validation history plots
-- Save the classification report
 ---
 
 ## About the project
@@ -49,8 +36,8 @@ The repo was setup to work with Windows (the WIN_ files), MacOS and Linux (the M
 ### 1. Clone repository to desired directory
 
 ```bash
-git clone https://github.com/alekswael/assignment3-pretrained-cnns
-cd assignment3-pretrained-cnns
+git clone https://github.com/alekswael/pretrained_cnn_fashion_classification
+cd pretrained_cnn_fashion_classification
 ```
 ### 2. Run setup script 
 **NOTE:** Depending on your OS, run either `WIN_setup.sh` or `MACL_setup.sh`.
