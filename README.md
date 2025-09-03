@@ -144,5 +144,5 @@ leggings_and_salwars       0.38      0.69      0.49       500
         weighted avg       0.56      0.30      0.28      7500
 ```
 
-![Learning curves](out\cnn_fashion_SUBSET.png)
+![Learning curves](out/cnn_fashion_SUBSET.png)
 *Learning curves for model fit.*
